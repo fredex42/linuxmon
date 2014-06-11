@@ -36,6 +36,7 @@ void procstat::parse_cpu(ifstream file)
 {
 
 }
+
 int procstat::update()
 {
 ifstream file("/proc/stat");

@@ -32,9 +32,25 @@ procstat::~procstat() {
 	}
 }
 
+#define CPULINE 12
 void procstat::parse_cpu(ifstream &file)
 {
+int val[CPULINE],n=0;
 
+for(n=0;n<CPULINE;++n)
+	val=-1;
+n=0;
+
+while(file>>val[n]){
+	++n;
+	if(n>CPULINE) break;
+}
+
+cpustat c=new cpustat;
+c->setUser(val[0]);
+c->setNice(val[1]);
+c->setSystem(val[2]);
+c->setIdle(val[3]);
 }
 
 int procstat::update()

@@ -107,7 +107,7 @@ class fileerror: public exception
 		{
 		return "Unable to open /proc/stat";
 		}
-} fileerror;
+};// fileerror;
 
 class procstat: public procfile {
 public:
@@ -119,7 +119,7 @@ public:
 	int db_commit(DB_REF reference);
 
 private:
-	void parse_cpu(ifstream file);
+	void parse_cpu(ifstream &file);
 
 	vector<class cpustat *> cpus;
 	int page_in,page_out;

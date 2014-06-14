@@ -12,8 +12,9 @@ using namespace std;
 base::base() {
 	// TODO Auto-generated constructor stub
 	refcount=0;
-	warn=cout;
+/*	warn=cout;
 	debug=cout;
+	*/
 }
 
 base::~base() {

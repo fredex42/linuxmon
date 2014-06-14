@@ -8,10 +8,60 @@
 #ifndef BASE_H_
 #define BASE_H_
 
-#include <ostream>
+#include <iostream>
 using namespace std;
 
 #define DB_REF void*
+
+/*
+template<class T>
+class warnstream : public ostream {
+public:
+
+class warnstream& operator<<(const T& obj)
+{
+	std::cout << obj;
+	return this;
+}
+};
+
+template<class T>
+class debugstream : public ostream {
+public:
+	class debugstream& operator<<(const T& obj)
+	{
+		std::cout << obj;
+		return this;
+	}
+	void output(bool flag){
+		should_output=flag;
+	}
+	bool output(){
+		return should_output;
+	}
+private:
+	bool should_output;
+};
+*/
+
+/*
+class MyStreamBuf: public streambuf
+{
+};
+class debugstream : public ostream {
+public:
+	debugstream() : std::ostream(&msb),ios(0) {}
+	virtual ~debugstream() { msb.pubsync(); }
+
+
+private:
+	class MyStreamBuf msb;
+
+};
+*/
+
+#define warn std::cerr
+#define debug std::cout
 
 class base {
 public:
@@ -21,8 +71,9 @@ public:
 	void ref();
 	void unref();
 
-	ostream warn;
-	ostream debug;
+/*	class warnstream warn;
+	class debugstream debug;
+	*/
 private:
 	int refcount;
 };

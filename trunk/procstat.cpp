@@ -32,7 +32,7 @@ procstat::~procstat() {
 	}
 }
 
-void procstat::parse_cpu(ifstream file)
+void procstat::parse_cpu(ifstream &file)
 {
 
 }
@@ -44,11 +44,11 @@ string token;
 string param;
 
 if(!file.is_open())
-	throw fileerror;
+	throw fileerror();
 
 while(!file.eof()){
 		file >> token;
-		this->debug << "Got token: " << token;
+		debug << "Got token: " << token << endl;
 		if(token=="cpu"){
 			this->parse_cpu(file);
 		} else if(token=="page"){
@@ -61,9 +61,9 @@ while(!file.eof()){
 		} else if(token=="procs_running"){
 		} else if(token=="procs_blocked"){
 		} else {
-			this->warn << "Unrecognised token parsing /proc/stat: " << token;
+			warn << "Unrecognised token parsing /proc/stat: " << token << endl;
 			//file.getline();
-			file >> param >> "\n";
+			file >> param;
 		}
 }
 return 1;

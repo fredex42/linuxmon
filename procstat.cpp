@@ -80,14 +80,26 @@ while(std::getline(file,line)){
 		if(token.compare(0,3,"cpu")==0){
 			this->parse_cpu(ss);
 		} else if(token=="page"){
+			ss >> this->page_in >> this->page_out;
 		} else if(token=="swap"){
+			ss >> this->swap_page_in >> this->swap_page_out;
 		} else if(token=="intr"){
+			/* FIXME: this only reads the total. Should read interrupts into a seperate structure, like cpus */
+			ss >> interrupts_total;
+		} else if(token=="softirq"){
+			ss >> soft_interrupts_total;
 		} else if(token=="disk_io"){
+
 		} else if(token=="ctxt"){
+			ss >> context_switches;
 		} else if(token=="btime"){
+			ss >> boot_time;
 		} else if(token=="processes"){
+			ss >> processes_total;
 		} else if(token=="procs_running"){
+			ss >> procs_running;
 		} else if(token=="procs_blocked"){
+			ss >> procs_io_blocked;
 		} else {
 			warn << "Unrecognised token parsing /proc/stat: " << token << endl;
 			//file.getline();
@@ -108,5 +120,14 @@ for(vector<cpustat *>::iterator i=cpus.begin();i != cpus.end();++i){
 	(*i)->dump();
 }
 
+cout << "\t" << "Pages in: " << page_in << " out: " << page_out << endl;
+cout << "\t" << "Pages brought in from swap: " << swap_page_in << " out: " << swap_page_out << endl;
+cout << "\t" << "Total number of interrupts serviced: " << interrupts_total << endl;
+cout << "\t" << "Soft IRQs serviced: " << soft_interrupts_total << endl;
+cout << "\t" << "Context switches: " << context_switches << endl;
+cout << "\t" << "Boot time: " << ctime(&boot_time) << endl;
+cout << "\t" << "Total number of processes launched: " << processes_total << endl;
+cout << "\t" << "Processes currently in a runnable state: " << procs_running << endl;
+cout << "\t" << "Processes waiting for IO: " << procs_io_blocked << endl;
 
 }

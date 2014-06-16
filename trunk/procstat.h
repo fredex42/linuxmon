@@ -13,9 +13,17 @@
 
 using namespace std;
 
+class valueNotPresentException: public exception {
+	virtual const char * what() const throw()
+		{
+		return "Unable to open /proc/stat";
+		}
+}; //valueNotPresentException
+
 class cpustat: public base {
 public:
 	int getGuest() const {
+		if(guest==-1) throw valueNotPresentException();
 		return guest;
 	}
 
@@ -24,6 +32,7 @@ public:
 	}
 
 	int getGuestNice() const {
+		if(guest_nice==-1) throw valueNotPresentException();
 		return guest_nice;
 	}
 
@@ -32,6 +41,7 @@ public:
 	}
 
 	int getIdle() const {
+		if(idle==-1) throw valueNotPresentException();
 		return idle;
 	}
 
@@ -40,6 +50,7 @@ public:
 	}
 
 	int getIowait() const {
+		if(iowait==-1) throw valueNotPresentException();
 		return iowait;
 	}
 
@@ -48,14 +59,17 @@ public:
 	}
 
 	int getIrq() const {
+		if(irq==-1) throw valueNotPresentException();
 		return irq;
 	}
 
 	void setIrq(int irq) {
+
 		this->irq = irq;
 	}
 
 	int getNice() const {
+		if(nice==-1) throw valueNotPresentException();
 		return nice;
 	}
 
@@ -64,6 +78,7 @@ public:
 	}
 
 	int getSoftirq() const {
+		if(softirq==-1) throw valueNotPresentException();
 		return softirq;
 	}
 
@@ -72,6 +87,7 @@ public:
 	}
 
 	int getSteal() const {
+		if(steal==-1) throw valueNotPresentException();
 		return steal;
 	}
 
@@ -80,6 +96,7 @@ public:
 	}
 
 	int getSystem() const {
+		if(system==-1) throw valueNotPresentException();
 		return system;
 	}
 
@@ -88,6 +105,7 @@ public:
 	}
 
 	int getUser() const {
+		if(user==-1) throw valueNotPresentException();
 		return user;
 	}
 

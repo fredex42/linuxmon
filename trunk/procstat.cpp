@@ -38,7 +38,7 @@ void procstat::parse_cpu(ifstream &file)
 int val[CPULINE],n=0;
 
 for(n=0;n<CPULINE;++n)
-	val=-1;
+	val[n]=-1;
 n=0;
 
 while(file>>val[n]){
@@ -46,7 +46,7 @@ while(file>>val[n]){
 	if(n>CPULINE) break;
 }
 
-cpustat c=new cpustat;
+cpustat *c=new cpustat;
 c->setUser(val[0]);
 c->setNice(val[1]);
 c->setSystem(val[2]);

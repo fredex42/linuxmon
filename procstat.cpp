@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 
 #include "procstat.h"
@@ -33,7 +34,7 @@ procstat::~procstat() {
 }
 
 #define CPULINE 12
-void procstat::parse_cpu(ifstream &file)
+void procstat::parse_cpu(stringstream &ss)
 {
 int val[CPULINE],n=0;
 
@@ -41,7 +42,7 @@ for(n=0;n<CPULINE;++n)
 	val[n]=-1;
 n=0;
 
-while(file>>val[n]){
+while(ss>>val[n]){
 	++n;
 	if(n>CPULINE) break;
 }
@@ -51,6 +52,15 @@ c->setUser(val[0]);
 c->setNice(val[1]);
 c->setSystem(val[2]);
 c->setIdle(val[3]);
+c->setIowait(val[4]);
+c->setIrq(val[5]);
+c->setSoftirq(val[6]);
+c->setSteal(val[7]);
+c->setGuest(val[8]);
+c->setGuestNice(val[9]);
+
+cpus.push_back(c);
+
 }
 
 int procstat::update()
@@ -58,15 +68,17 @@ int procstat::update()
 ifstream file("/proc/stat");
 string token;
 string param;
+string line="";
 
 if(!file.is_open())
 	throw fileerror();
 
-while(!file.eof()){
-		file >> token;
+while(std::getline(file,line)){
+		stringstream ss(line);
+		ss >> token;
 		debug << "Got token: " << token << endl;
-		if(token=="cpu"){
-			this->parse_cpu(file);
+		if(token.compare(0,3,"cpu")==0){
+			this->parse_cpu(ss);
 		} else if(token=="page"){
 		} else if(token=="swap"){
 		} else if(token=="intr"){
@@ -79,8 +91,22 @@ while(!file.eof()){
 		} else {
 			warn << "Unrecognised token parsing /proc/stat: " << token << endl;
 			//file.getline();
-			file >> param;
+			ss >> param;
 		}
+		//file >> "\n";
 }
 return 1;
+}
+
+void procstat::dump()
+{
+cout << "procstat::dump" << endl;
+cout << "\t" << "Number of CPUs found: " << this->cpus.size()-1 << endl;
+cout << "\t\t" << "User" << "\t" << "System" << "\t" << "Nice" << "\tIdle" << endl;
+
+for(vector<cpustat *>::iterator i=cpus.begin();i != cpus.end();++i){
+	(*i)->dump();
+}
+
+
 }

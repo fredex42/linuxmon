@@ -13,6 +13,7 @@ int main(int argc,char *argv[])
 class procstat stat=procstat();
 
 stat.update();
+stat.dump();
 }
 
 

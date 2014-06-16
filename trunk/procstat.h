@@ -10,6 +10,7 @@
 
 #include "procfile.h"
 #include <vector>
+#include <time.h>
 
 using namespace std;
 
@@ -147,8 +148,10 @@ private:
 	vector<class cpustat *> cpus;
 	int page_in,page_out;
 	int swap_page_in,swap_page_out;
+	long interrupts_total;
+	long soft_interrupts_total;
 	int context_switches;
-	int boot_time;
+	time_t boot_time;
 	long processes_total;
 	int procs_running;
 	int procs_io_blocked;

@@ -114,6 +114,10 @@ public:
 	}
 
 	int db_commit(DB_REF reference);
+	void dump()
+	{
+		cout << "\t\t" << user << "\t" << system << "\t" << nice << "\t" << idle <<  endl;
+	}
 private:
 	int user,nice,system,idle,iowait,irq,softirq,steal,guest,guest_nice;
 
@@ -136,8 +140,9 @@ public:
 	int update();
 	int db_commit(DB_REF reference);
 
+	void dump();
 private:
-	void parse_cpu(ifstream &file);
+	void parse_cpu(stringstream &file);
 
 	vector<class cpustat *> cpus;
 	int page_in,page_out;

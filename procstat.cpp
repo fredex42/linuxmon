@@ -5,11 +5,6 @@
  *      Author: andy
  */
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <string>
-
 #include "procstat.h"
 using namespace std;
 
@@ -19,6 +14,8 @@ procstat::procstat() {
 	page_out=-1;
 	swap_page_in=-1;
 	swap_page_out=-1;
+	soft_interrupts_total=-1;
+	interrupts_total=-1;
 	context_switches=-1;
 	boot_time=-1;
 	processes_total=-1;

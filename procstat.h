@@ -124,14 +124,6 @@ private:
 
 };
 
-class fileerror: public exception
-{
-	virtual const char * what() const throw()
-		{
-		return "Unable to open /proc/stat";
-		}
-};// fileerror;
-
 class procstat: public procfile {
 public:
 	procstat();

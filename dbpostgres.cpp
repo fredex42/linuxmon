@@ -11,7 +11,7 @@
 using namespace pqxx;
 
 db_postgres::~db_postgres() {
-	// TODO Auto-generated destructor stub
+	cerr << "DEBUG: Shutting down database connection" << endl;
 	if(needs_commit) this->commit();
 	if(conn) delete conn;
 }
@@ -23,7 +23,7 @@ db_postgres::db_postgres(const string& host, const string& port,const string& us
 		const string& pass, const string& dbname) {
 string connectionString;
 
-connectionString="host="+host+" username="+user+" password="+pass+" dbname="+dbname;
+connectionString="host="+host+" user="+user+" password="+pass+" dbname="+dbname;
 if(port!=""){
 	connectionString+=" port="+port;
 }

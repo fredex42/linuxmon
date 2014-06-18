@@ -8,7 +8,21 @@
 #ifndef PROCFILE_H_
 #define PROCFILE_H_
 
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 #include "base.h"
+
+class fileerror: public exception
+{
+	virtual const char * what() const throw()
+		{
+		return "Unable to open /proc/stat";
+		}
+};// fileerror;
 
 class procfile: public base {
 public:

@@ -13,6 +13,31 @@ using namespace std;
 
 #define DB_REF void*
 
+class invalidArgumentException: public std::exception {
+public:
+	invalidArgumentException() {
+		desc="An invalid argument was given";
+	}
+	invalidArgumentException(char *msg){
+		desc=msg;
+	}
+
+	invalidArgumentException(std::string& msg){
+		desc=msg;
+	}
+
+	virtual ~invalidArgumentException() throw(){
+
+		}
+
+	virtual const char* what() const throw()
+	{
+		return desc.c_str();
+	}
+private:
+	std::string desc;
+};
+
 /*
 template<class T>
 class warnstream : public ostream {

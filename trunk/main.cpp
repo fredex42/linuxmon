@@ -16,6 +16,7 @@
 #include "procstat.h"
 #include "procmeminfo.h"
 #include "procloadavg.h"
+#include "serverparams.h"
 
 using namespace std;
 
@@ -133,6 +134,13 @@ la.update();
 la.dump();
 
 delete dbc;
+
+class serverparams sp;
+/*class ipv4 address;
+address.first_available();
+cout << "Got first available address: " << address.as_string();
+*/
+sp.dump();
 
 }
 

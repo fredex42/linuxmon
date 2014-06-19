@@ -9,6 +9,7 @@
 #define PROCMEMINFO_H_
 
 #include <string>
+#include <sstream>
 #include <map>
 #include <cstdlib>
 #include <math.h>
@@ -63,9 +64,26 @@ public:
 	void setUnitName(const string& unitName) {
 		this->unitName = unitName;
 	}
+	void normalise();
+
+	std::string& asString() {
+		stringstream ss;
+		ss << this->size << this->unitName;
+		string *rtn=new string(ss.str());
+		return *rtn;
+	}
+
+	std::string& realValueAsString() {
+		stringstream ss;
+		ss << this->realValue();
+		string *rtn=new string(ss.str());
+		return *rtn;
+	}
+protected:
+	int unitToPower(const string&);
+	std::string& powerToUnit(int pow,string& unitType);
 
 private:
-	int unitToPower(const string&);
 	long size;
 	string unitName;
 	int power;

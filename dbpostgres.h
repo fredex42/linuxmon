@@ -13,6 +13,14 @@ using namespace std;
 #include "base.h"
 #include <pqxx/pqxx>
 
+class connectionBusyException: public exception {
+public:
+	virtual const char* what() const throw()
+	{
+		return "Database connection is already performing a transaction";
+	}
+};
+
 class db_postgres: public base {
 public:
 	/* this constructor connects over TCP/IP */
@@ -26,11 +34,16 @@ public:
 
 	void begin();
 	void commit();
-	void doSQL(const string &sql,...);
+	void doSQL(const string &sql);
+	//void doSQL(const string &sql,...);
 
-private:
+protected:
 	bool needs_commit;
+	pqxx::result result;
+private:
 	pqxx::connection *conn;
+	pqxx::work *transaction;
+
 };
 
 #endif /* DBPOSTGRES_H_ */

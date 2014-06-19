@@ -14,6 +14,7 @@
 //#include <iostream>
 #include <unistd.h>
 
+#include "procmeminfo.h"
 #include "serverparams.h"
 
 serverparams::serverparams() {
@@ -118,6 +119,21 @@ gethostname(tmp,BUFSIZE);
 std::string tmp2(tmp);	/*convert to an STL string to go into the map*/
 value["server_name"]=tmp2;
 
+std::stringstream ss;
+ss << sysconf(_SC_NPROCESSORS_ONLN);
+value["cpus"]=ss.str();
+
+procmeminfo mi;
+mi.update();
+std::string tmp3("MemTotal");
+
+sizeEntry *s=mi.get(tmp3);
+s->ref();
+s->normalise();
+
+value["memory"]=s->asString();
+
+s->unref();
 }
 
 void serverparams::dump() {

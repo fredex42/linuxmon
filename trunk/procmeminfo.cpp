@@ -17,6 +17,31 @@ procmeminfo::~procmeminfo() {
 	// TODO Auto-generated destructor stub
 }
 
+std::string& sizeEntry::powerToUnit(int pow,string& unitType)
+{
+std::string *tmp=NULL;
+
+switch(pow){
+case 3:
+	tmp=new string("K");
+	break;
+case 6:
+	tmp=new string("M");
+	break;
+case 9:
+	tmp=new string("G");
+	break;
+case 12:
+	tmp=new string("T");
+	break;
+}
+
+std::string *rtn=new string;
+(*rtn)=(*tmp)+unitType;
+delete tmp;
+return *rtn;
+}
+
 int sizeEntry::unitToPower(const string& unitName)
 {
 switch(unitName[0]){
@@ -45,6 +70,21 @@ default:
 	return 0;
 }
 return 0;
+}
+
+void sizeEntry::normalise() {
+int power=0;
+float value=this->size;
+
+while(value>1){
+	power+=3;
+	value=value/pow(10,3);
+}
+power-=3;
+this->size=this->size/pow(10,power);
+this->power=this->power+power;
+string unitType("B");
+this->unitName=this->powerToUnit(this->power,unitType);
 }
 
 int procmeminfo::update() {

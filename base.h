@@ -11,7 +11,7 @@
 #include <iostream>
 using namespace std;
 
-#define DB_REF void*
+#define DB_REF class metrixdb&
 
 class invalidArgumentException: public std::exception {
 public:

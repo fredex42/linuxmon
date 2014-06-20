@@ -102,6 +102,12 @@ int ipv4::family() {
 }
 
 std::string& serverparams::get(std::string& name) {
+return value[name];
+}
+
+std::string& serverparams::get(char *name) {
+std::string tmp(name);
+return value[tmp];
 }
 
 #ifndef BUFSIZE

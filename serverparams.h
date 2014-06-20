@@ -42,6 +42,7 @@ public:
 	virtual ~serverparams();
 
 	std::string& get(std::string& name);
+	std::string& get(char *name);
 	void update();
 
 	void dump();

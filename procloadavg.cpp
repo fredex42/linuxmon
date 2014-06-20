@@ -6,9 +6,17 @@
  */
 
 #include "procloadavg.h"
+#include "metrixdb.h"
 
 procloadavg::procloadavg() {
 	// TODO Auto-generated constructor stub
+	this->metrictype="load";
+	fifteen_min=-1;
+	total_entities=-1;
+	one_min=-1;
+	five_min=-1;
+	last_pid=-1;
+	runnable_entities=-1;
 
 }
 
@@ -36,6 +44,22 @@ if(entities.length()>0){
 }
 
 return 1;
+
+}
+
+int procloadavg::db_commit(DB_REF reference)
+{
+string id;
+id="1min";
+reference.insert(metrictype,id,one_min);
+id="5min";
+reference.insert(metrictype,id,five_min);
+id="15min";
+reference.insert(metrictype,id,fifteen_min);
+id="total_entities";
+reference.insert(metrictype,id,total_entities);
+id="runnable_entities";
+reference.insert(metrictype,id,runnable_entities);
 
 }
 

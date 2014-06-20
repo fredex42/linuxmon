@@ -12,7 +12,8 @@
 #include <getopt.h>
 #include <iostream>
 
-#include "dbpostgres.h"
+#include "base.h"
+#include "metrixdb.h"
 #include "procstat.h"
 #include "procmeminfo.h"
 #include "procloadavg.h"
@@ -106,13 +107,13 @@ for(options_iterator i=opts.begin();i!=opts.end();++i){
 	cerr << "\t" << i->first << "=" << i->second << endl;
 }
 
-class db_postgres *dbc=NULL;
+class metrixdb *dbc=NULL;
 
 try{
 	if(opts["db_host"]!=""){
-		dbc=new db_postgres(opts["db_host"],opts["db_port"],opts["db_user"],opts["db_password"],"metrix");
+		dbc=new metrixdb(opts["db_host"],opts["db_port"],opts["db_user"],opts["db_password"],"metrix");
 	} else {
-		dbc=new db_postgres("metrix");
+		dbc=new metrixdb("metrix");
 	}
 }
 catch(exception& e){
@@ -120,27 +121,36 @@ catch(exception& e){
 	exit(1);
 }
 
-class procstat stat=procstat();
-
-stat.update();
-stat.dump();
-
-class procmeminfo mi=procmeminfo();
-mi.update();
-mi.dump();
-
-class procloadavg la=procloadavg();
-la.update();
-la.dump();
-
-delete dbc;
-
 class serverparams sp;
 /*class ipv4 address;
 address.first_available();
 cout << "Got first available address: " << address.as_string();
 */
 sp.dump();
+
+int server_id=dbc->server_by_params(sp);
+cout << "Got server id: " << server_id << endl;
+
+dbc->begin();
+
+class procstat stat=procstat();
+stat.update();
+stat.dump();
+stat.db_commit(*dbc);
+
+class procmeminfo mi=procmeminfo();
+mi.update();
+mi.dump();
+mi.db_commit(*dbc);
+
+class procloadavg la=procloadavg();
+la.update();
+la.dump();
+la.db_commit(*dbc);
+
+dbc->commit();
+
+delete dbc;
 
 }
 

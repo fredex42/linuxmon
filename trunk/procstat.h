@@ -11,6 +11,7 @@
 #include "procfile.h"
 #include <vector>
 #include <time.h>
+#include "metrixdb.h"
 
 using namespace std;
 
@@ -114,7 +115,38 @@ public:
 		this->user = user;
 	}
 
-	int db_commit(DB_REF reference);
+	int db_commit(DB_REF reference,std::string type,int n)
+	{
+		stringstream idstream;
+		idstream << "cpu";
+		if(n>0){
+			idstream << n;
+		}
+		idstream << "_";
+		string id;
+		id=idstream.str()+"user";
+		reference.insert(type,id,user);
+		id=idstream.str()+"system";
+		reference.insert(type,id,system);
+		id=idstream.str()+"nice";
+		reference.insert(type,id,nice);
+		id=idstream.str()+"idle";
+		reference.insert(type,id,idle);
+		id=idstream.str()+"iowait";
+		reference.insert(type,id,iowait);
+		id=idstream.str()+"irq";
+		reference.insert(type,id,irq);
+		id=idstream.str()+"softirq";
+		reference.insert(type,id,softirq);
+		id=idstream.str()+"steal";
+		reference.insert(type,id,steal);
+		id=idstream.str()+"guest";
+		reference.insert(type,id,guest);
+		id=idstream.str()+"guest_nice";
+		reference.insert(type,id,guest_nice);
+
+		return 1;
+	}
 	void dump()
 	{
 		cout << "\t\t" << user << "\t" << system << "\t" << nice << "\t" << idle <<  endl;

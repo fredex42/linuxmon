@@ -6,6 +6,8 @@
  */
 
 #include "procstat.h"
+#include "metrixdb.h"
+
 using namespace std;
 
 procstat::procstat() {
@@ -21,6 +23,7 @@ procstat::procstat() {
 	processes_total=-1;
 	procs_running=-1;
 	procs_io_blocked=-1;
+	metrictype="system";
 }
 
 procstat::~procstat() {
@@ -31,6 +34,7 @@ procstat::~procstat() {
 }
 
 #define CPULINE 12
+
 void procstat::parse_cpu(stringstream &ss)
 {
 int val[CPULINE],n=0;
@@ -127,4 +131,39 @@ cout << "\t" << "Total number of processes launched: " << processes_total << end
 cout << "\t" << "Processes currently in a runnable state: " << procs_running << endl;
 cout << "\t" << "Processes waiting for IO: " << procs_io_blocked << endl;
 
+}
+
+int procstat::db_commit(DB_REF reference)
+{
+vector<cpustat *>::iterator it;
+int n=0;
+for(it=cpus.begin();it!=cpus.end();++it){
+	(*it)->db_commit(reference,metrictype,n);
+	++n;
+}
+
+string id;
+id="pages_in";
+reference.insert(metrictype,id,page_in);
+id="pages_out";
+reference.insert(metrictype,id,page_out);
+id="swap_page_in";
+reference.insert(metrictype,id,swap_page_in);
+id="swap_page_out";
+reference.insert(metrictype,id,swap_page_out);
+id="interrupts_total";
+reference.insert(metrictype,id,interrupts_total);
+id="soft_interrupts_total";
+reference.insert(metrictype,id,soft_interrupts_total);
+id="context_switches";
+reference.insert(metrictype,id,context_switches);
+id="boot_time";
+reference.insert(metrictype,id,boot_time);
+id="processes_launched";
+reference.insert(metrictype,id,processes_total);
+id="procs_runnable";
+reference.insert(metrictype,id,procs_running);
+id="procs_io_blocked";
+reference.insert(metrictype,id,procs_io_blocked);
+return 1;
 }

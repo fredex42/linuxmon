@@ -6,11 +6,12 @@
  */
 
 #include "procmeminfo.h"
+#include "metrixdb.h"
 using namespace std;
 
 procmeminfo::procmeminfo() {
 	// TODO Auto-generated constructor stub
-
+	this->metrictype="memory";
 }
 
 procmeminfo::~procmeminfo() {
@@ -122,6 +123,18 @@ class sizeEntry* procmeminfo::get(string& name) {
 	sizeEntry *rv=info[name];
 	rv->ref();
 	return rv;
+}
+
+int procmeminfo::db_commit(DB_REF reference)
+{
+map<string,sizeEntry *>::iterator it;
+
+for(it=info.begin();it!=info.end();++it){
+	string id=it->first;
+	string value=(it->second)->realValueAsString();
+	reference.insert(metrictype,id,value);
+}
+return 1;
 }
 
 void procmeminfo::dump() {

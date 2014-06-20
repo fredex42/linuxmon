@@ -30,6 +30,8 @@ public:
 	virtual ~procfile();
 
 	int db_commit(DB_REF reference);
+protected:
+	std::string metrictype;
 };
 
 #endif /* PROCFILE_H_ */

@@ -27,7 +27,6 @@ procstat::procstat() {
 }
 
 procstat::~procstat() {
-	// TODO Auto-generated destructor stub
 	for(vector<class cpustat *>::iterator i=cpus.begin();i!=cpus.end(); ++i){
 		(*i)->unref();
 	}

@@ -118,7 +118,7 @@ try{
 }
 catch(exception& e){
 	cerr << "ERROR: Problem connecting to database: " << e.what() << endl;
-	exit(1);
+	//exit(1);
 }
 
 class serverparams sp;

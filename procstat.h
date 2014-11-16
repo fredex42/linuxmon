@@ -24,95 +24,140 @@ class valueNotPresentException: public exception {
 
 class cpustat: public base {
 public:
+	cpustat()
+	{
+		user=-1;
+		nice=-1;
+		system=-1;
+		idle=-1;
+		iowait=-1;
+		irq=-1;
+		softirq=-1;
+		steal=-1;
+		guest=-1;
+		guest_nice=-1;
+		total=0;
+	}
+
+	/*
 	int getGuest() const {
 		if(guest==-1) throw valueNotPresentException();
 		return guest;
 	}
-
-	void setGuest(int guest) {
-		this->guest = guest;
+*/
+	float getGuest() const {
+		if(guest==-1) throw valueNotPresentException();
+		return ((float)guest/(float)total)*100.0;
 	}
 
+	void setGuest(int guest) {
+		if(this->guest!=-1) total-=this->guest;
+		this->guest = guest;
+		total+=guest;
+	}
+/*
 	int getGuestNice() const {
 		if(guest_nice==-1) throw valueNotPresentException();
 		return guest_nice;
 	}
+*/
+	float getGuestNice() const {
+		if(guest_nice==-1) throw valueNotPresentException();
+		return ((float)guest_nice/(float)total)*100.0;
+	}
 
 	void setGuestNice(int guestNice) {
+		if(this->guest_nice!=-1) total-=this->guest_nice;
 		guest_nice = guestNice;
+		total+=guest_nice;
 	}
 
 	int getIdle() const {
 		if(idle==-1) throw valueNotPresentException();
-		return idle;
+		return ((float)idle/(float)total)*100.0;
 	}
 
 	void setIdle(int idle) {
+		if(this->idle!=-1) total-=this->idle;
 		this->idle = idle;
+		total+=idle;
 	}
 
 	int getIowait() const {
 		if(iowait==-1) throw valueNotPresentException();
-		return iowait;
+		return ((float)iowait/(float)total)*100.0;
 	}
 
 	void setIowait(int iowait) {
+		if(this->iowait!=-1) total-=this->iowait;
 		this->iowait = iowait;
+		total+=iowait;
 	}
 
 	int getIrq() const {
 		if(irq==-1) throw valueNotPresentException();
-		return irq;
+		return ((float)irq/(float)total)*100.0;
 	}
 
 	void setIrq(int irq) {
-
+		if(this->irq!=-1) total-=this->irq;
 		this->irq = irq;
+		total+=irq;
 	}
 
 	int getNice() const {
 		if(nice==-1) throw valueNotPresentException();
-		return nice;
+		return ((float)nice/(float)total)*100.0;
 	}
 
 	void setNice(int nice) {
+		if(this->nice!=-1) total-=this->nice;
 		this->nice = nice;
+		total+=nice;
 	}
 
 	int getSoftirq() const {
 		if(softirq==-1) throw valueNotPresentException();
-		return softirq;
+		return ((float)softirq/(float)total)*100.0;
 	}
 
 	void setSoftirq(int softirq) {
+		if(this->softirq!=-1) total-=this->softirq;
 		this->softirq = softirq;
+		total+=softirq;
 	}
 
 	int getSteal() const {
 		if(steal==-1) throw valueNotPresentException();
-		return steal;
+		return ((float)steal/(float)total)*100.0;
 	}
 
 	void setSteal(int steal) {
+		if(this->steal!=-1) total-=this->steal;
 		this->steal = steal;
+		total+=steal;
 	}
 
 	int getSystem() const {
 		if(system==-1) throw valueNotPresentException();
-		return system;
+		return ((float)system/(float)total)*100.0;
 	}
 
 	void setSystem(int system) {
+		if(this->system!=-1) total-=this->system;
 		this->system = system;
+		total+=system;
 	}
 
 	int getUser() const {
 		if(user==-1) throw valueNotPresentException();
-		return user;
+		return ((float)user/(float)total)*100.0;
 	}
 
 	void setUser(int user) {
+		if(this->user!=-1) total-=this->user;
 		this->user = user;
+		total+=user;
 	}
 
 	int db_commit(DB_REF reference,std::string type,int n)
@@ -150,10 +195,12 @@ public:
 	void dump()
 	{
 		cout << "\t\t" << user << "\t" << system << "\t" << nice << "\t" << idle <<  endl;
+		cout << "\t\t user:" << getUser() << "%\tsystem:" << getSystem() << "%";
+		cout << "\tnice:" << getNice() << "%\tidle:" << getIdle() << "%\tiowait:" << getIowait() << endl;
 	}
 private:
 	int user,nice,system,idle,iowait,irq,softirq,steal,guest,guest_nice;
-
+	int64_t total;
 };
 
 class procstat: public procfile {

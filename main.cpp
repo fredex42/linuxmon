@@ -21,6 +21,8 @@
 
 using namespace std;
 
+#define nodb	//define this for testing. It will skip attempting to connect to db.
+
 std::map<std::string,std::string> opts;
 typedef std::map<std::string,std::string>::iterator options_iterator;
 
@@ -109,6 +111,7 @@ for(options_iterator i=opts.begin();i!=opts.end();++i){
 
 class metrixdb *dbc=NULL;
 
+#ifndef nodb
 try{
 	if(opts["db_host"]!=""){
 		dbc=new metrixdb(opts["db_host"],opts["db_port"],opts["db_user"],opts["db_password"],"metrix");
@@ -120,6 +123,7 @@ catch(exception& e){
 	cerr << "ERROR: Problem connecting to database: " << e.what() << endl;
 	//exit(1);
 }
+#endif
 
 class serverparams sp;
 /*class ipv4 address;
@@ -128,25 +132,33 @@ cout << "Got first available address: " << address.as_string();
 */
 sp.dump();
 
+#ifndef nodb
 int server_id=dbc->server_by_params(sp);
 cout << "Got server id: " << server_id << endl;
 
 dbc->begin();
+#endif
 
 class procstat stat=procstat();
 stat.update();
 stat.dump();
+#ifndef nodb
 stat.db_commit(*dbc);
+#endif
 
 class procmeminfo mi=procmeminfo();
 mi.update();
 mi.dump();
+#ifndef nodb
 mi.db_commit(*dbc);
+#endif
 
 class procloadavg la=procloadavg();
 la.update();
 la.dump();
+#ifndef nodb
 la.db_commit(*dbc);
+#endif
 
 dbc->commit();
 
